@@ -8,12 +8,12 @@ class SearchFormMain extends React.Component {
     return (
       <div>
         <SearchBar />
-        <ProductTable products={this.props.products} />
+        <ProductTable />
       </div>
     );
   }
 }
-
+/*
 let PRODUCTS = [
   {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
   {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
@@ -22,8 +22,8 @@ let PRODUCTS = [
   {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
   {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 ];
-
+*/
 ReactDOM.render(
-    <SearchFormMain products={PRODUCTS}/>,
+    <SearchFormMain /*products={PRODUCTS}*//>,
     document.getElementById("app")
 )
