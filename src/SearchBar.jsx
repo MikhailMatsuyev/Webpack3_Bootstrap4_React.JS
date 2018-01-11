@@ -1,85 +1,101 @@
 import React from 'react';
 import firebase from './config-firebase';
+import { FormBuilder, Validators, Field} from 'react-reactive-form';
 
 class SearchBar extends React.Component {
 
-        constructor() {
-            super();
-            this.state = {textSearch: ''};
-            this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
-            this.handleSearchTextFind = this.handleSearchTextFind.bind(this);
-        }
+  constructor() {
+    super();
+    this.state = { textSearch: '' };
 
-        componentDidMount() {
-            const rootRef = firebase.database().ref();
+    this.searchForm = FormBuilder.group({
+        search_input: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    });
 
-            this.node1Ref = rootRef.child('node1');
-        }
+  }
 
-        getActualFullDate() {
-            let d = new Date();
-            let day = this.addZero(d.getDate());
-            let month = this.addZero(d.getMonth()+1);
-            let year = this.addZero(d.getFullYear());
-            let h = this.addZero(d.getHours());
-            let m = this.addZero(d.getMinutes());
-            let s = this.addZero(d.getSeconds());
-            return day + "/" + month + "/" + year + ", " + h + ":" + m;
-        }
+  componentDidMount() {
+    const rootRef = firebase.database().ref();
+    this.node1Ref = rootRef.child('node1');
+  }
 
-        handleSearchTextFind(event) {
-            let newTextSearch = {
-                text: this.state.textSearch,
-                id: this.getActualFullDate()
-            };
+  getActualFullDate() {
+    const d = new Date();
+    const day = this.addZero(d.getDate());
+    const month = this.addZero(d.getMonth() + 1);
+    const year = this.addZero(d.getFullYear());
+    const h = this.addZero(d.getHours());
+    const m = this.addZero(d.getMinutes());
+    const s = this.addZero(d.getSeconds());
+    return `${day}/${month}/${year}, ${h}:${m}:${s}`;
+  }
 
-            this.node1Ref.push(newTextSearch);
-            //let d = new Date;
+  handleSearchTextFind(event) {
+    event.preventDefault();
+    const newTextSearch = {
+      text: this.searchForm.value.search_input,
+      dateTime: this.getActualFullDate()
+    };
 
-            //console.log('Date.now().toString()',this.getActualFullDate());
+    this.node1Ref.push(newTextSearch);
 
-        }
+  }
 
-        addZero(i) {
-            if (i < 10) {
-                i = "0" + i;
-            }
-            return i;
-        }
-
-
-        handleSearchTextChange(event){
-            //console.log('event.target.value handleSearchTextChange',event.target.value);
-            this.setState({ textSearch: event.target.value });
-
-        }
-
-        render() {
-            return (
-                <div className="container">
-                   <h1 className="text-center">History search app</h1>
-                   <form>
-                       <div className="form-group row">
-                           <label className="col-sm-2 col-form-label"> Im looking for: </label>
-                           <input type="text"
-                                  placeholder="Search..."
-                                  className="form-control col-sm-8"
-                                  onChange={this.handleSearchTextChange}
-                           />
-
-                           <button type="button"
-                                   className="btn btn-primary col-sm-1"
-                                   onClick={this.handleSearchTextFind}
-                           >
-                               Find
-                           </button>
-
-                       </div>
-                       
-                   </form>
-                </div>
-            );
-        }
+  addZero(i) {
+    if (i < 10) {
+      i = `0${i}`;
     }
+    return i;
+  }
+
+
+  render() {
+    return (
+      <div className="container">
+        <h1 className="text-center">History search app</h1>
+
+        <Field
+          control={this.searchForm}
+          render={({ get, invalid, submitted }) => (
+            <form onSubmit={(e)=>this.handleSearchTextFind(e)}>
+              <Field
+                control={get('search_input')}
+                render={
+                    ({ handler, touched, hasError }) => (
+                        <div className="form-group row">
+                            <label className="col-sm-2 col-form-label"> Im looking for: </label>
+                            <input
+                                type="text"
+
+
+                                placeholder="Search..."
+                                className="form-control col-sm-8 "
+
+                                {...handler()}
+                            />
+                            <button
+                                type="submit"
+                                className="btn btn-primary col-sm-1"
+                                disabled={invalid}
+                            >
+                                Find
+                            </button>
+                            <span style={{ display: 'block', color: 'red' }} className="col-sm-5">
+                                {   touched
+                                    && hasError('required') && 'Search text is required'
+                                    || hasError('minLength') && `Search text should Be greater than 2 characters`
+                                    || hasError('maxLength') && `Search text should Be less than 100 characters`
+                                }
+                            </span>
+                        </div>
+                    )}
+              />
+            </form>
+          )}
+        />
+      </div>
+    );
+  }
+}
 
 export default SearchBar;

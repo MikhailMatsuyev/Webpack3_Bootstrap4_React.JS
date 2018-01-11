@@ -1,9 +1,6 @@
 import React from 'react';
-//import ProductCategoryRow from './ProductCategoryRow.jsx';
 import ProductRow from './ProductRow.jsx';
-
 import firebase from './config-firebase';
-
 
 class ProductTable extends React.Component {
 
@@ -17,11 +14,9 @@ class ProductTable extends React.Component {
         const node1Ref = rootRef.child('node1');
         node1Ref.on('value', snap => {
             this.setState({
-                textSearch: snap.val()//JSON.stringify(snap.val())
+                textSearch: snap.val()
             });
         });
-
-
     }
 
     render() {
@@ -30,23 +25,23 @@ class ProductTable extends React.Component {
         for (let o in this.state.textSearch){
                 rows.push(<ProductRow
                     key         =   {o}
-                    tSearchText =   {this.state.textSearch[o].text}
-
-                    tSearchDate =   {this.state.textSearch[o].id}
+                    tSearchDate =   {this.state.textSearch[o].dateTime}
+                    id          =   {o}
                 >
+                    {this.state.textSearch[o].text}
                 </ProductRow>);
         }
 
         rows.reverse();
 
         return (
-            <div className="container">
-                <div className="table-responsive">
-                    <table className="table table-bordered">
+            <div className="container col-sm-5">
+                <div className="table-responsive ">
+                    <table className="table table-bordered ">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Price</th>
+                            <th>Request</th>
+                            <th>Date & Time</th>
                         </tr>
                         </thead>
                         <tbody>{rows}</tbody>
@@ -54,7 +49,6 @@ class ProductTable extends React.Component {
                 </div>
             </div>
         );
-
     }
 }
 

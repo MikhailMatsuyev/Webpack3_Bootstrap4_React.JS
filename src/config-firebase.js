@@ -10,6 +10,4 @@ const config = {
 };
 firebase.initializeApp(config);
 
-//console.log('config', config);
-
 export default firebase;
