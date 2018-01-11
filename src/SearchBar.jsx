@@ -9,7 +9,7 @@ class SearchBar extends React.Component {
     this.state = { textSearch: '' };
 
     this.searchForm = FormBuilder.group({
-        search_input: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+        search_input: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
     });
 
   }
@@ -83,7 +83,7 @@ class SearchBar extends React.Component {
                             <span style={{ display: 'block', color: 'red' }} className="col-sm-5">
                                 {   touched
                                     && hasError('required') && 'Search text is required'
-                                    || hasError('minLength') && `Search text should Be greater than 2 characters`
+                                    || hasError('minLength') && `Search text should Be greater than 1 characters`
                                     || hasError('maxLength') && `Search text should Be less than 100 characters`
                                 }
                             </span>

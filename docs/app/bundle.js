@@ -33286,7 +33286,7 @@ var SearchBar = function (_React$Component) {
     _this.state = { textSearch: '' };
 
     _this.searchForm = _reactReactiveForm.FormBuilder.group({
-      search_input: ['', [_reactReactiveForm.Validators.required, _reactReactiveForm.Validators.minLength(2), _reactReactiveForm.Validators.maxLength(100)]]
+      search_input: ['', [_reactReactiveForm.Validators.required, _reactReactiveForm.Validators.minLength(1), _reactReactiveForm.Validators.maxLength(100)]]
     });
 
     return _this;
@@ -33386,7 +33386,7 @@ var SearchBar = function (_React$Component) {
                     _react2.default.createElement(
                       'span',
                       { style: { display: 'block', color: 'red' }, className: 'col-sm-5' },
-                      touched && hasError('required') && 'Search text is required' || hasError('minLength') && 'Search text should Be greater than 2 characters' || hasError('maxLength') && 'Search text should Be less than 100 characters'
+                      touched && hasError('required') && 'Search text is required' || hasError('minLength') && 'Search text should Be greater than 1 characters' || hasError('maxLength') && 'Search text should Be less than 100 characters'
                     )
                   );
                 }
